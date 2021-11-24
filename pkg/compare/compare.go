@@ -102,13 +102,11 @@ func SpaceCompare() (bool, error) {
 						USL:        fmt.Sprintf("%.2f/%.2f", apcData.USL, spcData.USL),
 					}
 
-					//result will show "NG"
-					if apcData.LSL != spcData.LSL || apcData.USL != spcData.USL {
+					if apcData.LSL >= spcData.LSL && apcData.USL <= spcData.USL {
+						csvRow.Result = "OK"
+					} else {
 						csvRow.Result = "NG"
 						hadErr = true
-						//result will show "OK"
-					} else {
-						csvRow.Result = "OK"
 					}
 
 					if !common.StringInSlice(chartID, existChartID) {
@@ -158,10 +156,20 @@ func recordToCsv(records []Record, outPath string) error {
 }
 
 func updateRecord(ckRecord Record, records []Record) []Record {
+
+	needAppend := false
+
 	for index, record := range records {
-		if (record.ChartID == ckRecord.ChartID) && (ckRecord.ChangeTime.After(record.ChangeTime)) {
+		if (record.ChartID == ckRecord.ChartID) && (record.Recipe == ckRecord.Recipe) && (ckRecord.ChangeTime.After(record.ChangeTime)) {
 			records[index] = ckRecord
+		} else {
+			needAppend = true
 		}
 	}
+
+	if needAppend {
+		records = append(records, ckRecord)
+	}
+
 	return records
 }

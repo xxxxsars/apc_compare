@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"sync"
 	"time"
 )
 
@@ -57,63 +58,23 @@ func GetChartID(queryData QueryMap) (string, error) {
 }
 
 func GetApcData() ([]map[string]interface{}, error) {
-	var result []map[string]interface{}
+	//var result []map[string]interface{}
 
 	toolIDs, err := getToolIDs()
 	if err != nil {
 		return nil, err
 	}
 
-	//TODO :struct to map
-	apcParams := map[string]string{
-		"user":        setting.AppSetting.User,
-		"password":    setting.AppSetting.Password,
-		"FABSITE":     setting.AppSetting.FabSite,
-		"TOOLID":      "",
-		"PROCESSTYPE": setting.AppSetting.ProcessType,
-		"DATATYPE":    setting.AppSetting.DataType,
-		"ziped":       setting.AppSetting.Ziped,
-	}
-	//TODO :goroutine enhance performance
+	//TODO :get goruntine error
+
+	var result []map[string]interface{}
+	wg := &sync.WaitGroup{}
+	wg.Add(len(toolIDs))
+
 	for _, toolId := range toolIDs {
-		apcParams["TOOLID"] = toolId
-
-		jsonString, err := json.Marshal(apcParams)
-		if err != nil {
-			return nil, err
-		}
-
-		url := "http://10.21.10.124/APCWEB3D/APC_WBS/APCService.asmx/GetAPC_SpecList?"
-		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonString))
-		req.Header.Set("X-Custom-Header", "myvalue")
-		req.Header.Set("Content-Type", "application/json")
-
-		client := &http.Client{}
-		resp, err := client.Do(req)
-
-		if err != nil {
-			return nil, err
-		}
-
-		defer resp.Body.Close()
-
-		if resp.StatusCode != 200 {
-			return nil, errors.New(fmt.Sprintf("Get APC data has an error, the error was %s ", resp.Status))
-		}
-
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		var respJson map[string]interface{}
-		err = json.Unmarshal(body, &respJson)
-		if err != nil {
-			return nil, err
-		}
-
-		result = append(result, respJson)
+		go apcServiceResp(toolId, &result, wg)
 	}
+	wg.Wait()
 
 	return result, nil
 }
@@ -155,4 +116,57 @@ func getToolIDs() ([]string, error) {
 	}
 
 	return ToolIDs, nil
+}
+
+func apcServiceResp(toolId string, result *[]map[string]interface{}, wg *sync.WaitGroup) error {
+	defer wg.Done()
+
+	apcParams := map[string]string{
+		"user":        setting.AppSetting.User,
+		"password":    setting.AppSetting.Password,
+		"FABSITE":     setting.AppSetting.FabSite,
+		"TOOLID":      "",
+		"PROCESSTYPE": setting.AppSetting.ProcessType,
+		"DATATYPE":    setting.AppSetting.DataType,
+		"ziped":       setting.AppSetting.Ziped,
+	}
+	apcParams["TOOLID"] = toolId
+
+	jsonString, err := json.Marshal(apcParams)
+	if err != nil {
+		return err
+	}
+
+	url := "http://10.21.10.124/APCWEB3D/APC_WBS/APCService.asmx/GetAPC_SpecList?"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonString))
+	req.Header.Set("X-Custom-Header", "myvalue")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return errors.New(fmt.Sprintf("Get APC data has an error, the error was %s ", resp.Status))
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	var respJson map[string]interface{}
+	err = json.Unmarshal(body, &respJson)
+	if err != nil {
+		return err
+	}
+
+	*result = append(*result, respJson)
+
+	return nil
 }

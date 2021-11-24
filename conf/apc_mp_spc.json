@@ -1,91 +1,91 @@
 [
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S1DC",
     "spc_chart_id": "SPG/SPG04A/SD SP1 DC POWER"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S1G1",
     "spc_chart_id": "SPG/SPG04A/SD SP1 AR FLOW RATE"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S1PS",
     "spc_chart_id": "SPG/SPG04A/SD SP1 PRESSURE"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S1HT",
     "spc_chart_id": "SPG/SPG04A/SD SP1 SUB TEMP"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S1ST",
     "spc_chart_id": "SPG/SPG04A/SD SP1 SUB TEMP"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S2DC",
     "spc_chart_id": "SPG/SPG04A/SD SP2 DC POWER"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S2G1",
     "spc_chart_id": "SPG/SPG04A/SD SP2 AR FLOW RATE"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S2PS",
     "spc_chart_id": "SPG/SPG04A/SD SP2 PRESSURE"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S2HT",
     "spc_chart_id": "SPG/SPG04A/SD SP2 SUB TEMP"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S2ST",
     "spc_chart_id": "SPG/SPG04A/SD SP2 SUB TEMP"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S3DC",
     "spc_chart_id": "SPG/SPG04A/SD SP3 DC POWER"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S3G1",
     "spc_chart_id": "SPG/SPG04A/SD SP3 AR FLOW RATE"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S3PS",
     "spc_chart_id": "SPG/SPG04A/SD SP3 PRESSURE"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S3HT",
     "spc_chart_id": "SPG/SPG04A/SD SP3 SUB TEMP"
   },
   {
     "tool_id": "SPG04A",
-    "chamber": "KPC_CB3",
+    "chamber": "KPC_CB2",
     "parameter": "S3ST",
     "spc_chart_id": "SPG/SPG04A/SD SP3 SUB TEMP"
   },

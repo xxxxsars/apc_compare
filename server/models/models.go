@@ -16,12 +16,6 @@ var user = "exl_user_V2"
 var password = "hwtjdaup"
 var database = "RPT_DB"
 
-//var server = "192.168.1.41"
-//var port = 1433
-//var user = "sa"
-//var password = "Zz01470147"
-//var database = "master"
-
 // Setup initializes the database instance
 func Setup() {
 	var err error
