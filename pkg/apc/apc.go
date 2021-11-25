@@ -7,12 +7,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"golang.org/x/sync/errgroup"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"reflect"
-	"sync"
 	"time"
 )
 
@@ -65,16 +65,22 @@ func GetApcData() ([]map[string]interface{}, error) {
 		return nil, err
 	}
 
-	//TODO :get goruntine error
+	var eg errgroup.Group
 
 	var result []map[string]interface{}
-	wg := &sync.WaitGroup{}
-	wg.Add(len(toolIDs))
 
 	for _, toolId := range toolIDs {
-		go apcServiceResp(toolId, &result, wg)
+		toolId := toolId
+		eg.Go(func() error {
+			if err := apcServiceResp(toolId, &result); err != nil {
+				return err
+			}
+			return nil
+		})
 	}
-	wg.Wait()
+	if err := eg.Wait(); err != nil {
+		return nil, err
+	}
 
 	return result, nil
 }
@@ -118,8 +124,7 @@ func getToolIDs() ([]string, error) {
 	return ToolIDs, nil
 }
 
-func apcServiceResp(toolId string, result *[]map[string]interface{}, wg *sync.WaitGroup) error {
-	defer wg.Done()
+func apcServiceResp(toolId string, result *[]map[string]interface{}) error {
 
 	apcParams := map[string]string{
 		"user":        setting.AppSetting.User,
@@ -139,7 +144,7 @@ func apcServiceResp(toolId string, result *[]map[string]interface{}, wg *sync.Wa
 
 	url := "http://10.21.10.124/APCWEB3D/APC_WBS/APCService.asmx/GetAPC_SpecList?"
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonString))
-	req.Header.Set("X-Custom-Header", "myvalue")
+	//req.Header.Set("X-Custom-Header", "myvalue")
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}

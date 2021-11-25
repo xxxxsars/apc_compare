@@ -101,7 +101,6 @@ func SpaceCompare() (bool, error) {
 						Recipe:     apcData.Recipe,
 						USL:        fmt.Sprintf("%.2f/%.2f", apcData.USL, spcData.USL),
 					}
-
 					if apcData.LSL >= spcData.LSL && apcData.USL <= spcData.USL {
 						csvRow.Result = "OK"
 					} else {
