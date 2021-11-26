@@ -1,5 +1,5 @@
 BINARY_NAME=apc_compare
-PATH=@echo %cd%
+VERSION=1.0.1
 
 
 build:
@@ -11,9 +11,12 @@ build:
 
 	tar -a -f  bin/${BINARY_NAME}_x64.zip -c conf\*.*  -C ".\bin" ${BINARY_NAME}_x64.exe
 	tar -a -f  bin/${BINARY_NAME}_x86.zip -c conf\*.*  -C ".\bin" ${BINARY_NAME}_x86.exe
-
 run:
 	./bin/${BINARY_NAME}_x64.exe
+
+release:
+	tar -a -f  ./release/${BINARY_NAME}_${VERSION}.zip -c .\bin\${BINARY_NAME}_x64.zip  -C ".\bin" ${BINARY_NAME}_x86.zip
+.PHONY : release
 clean:
 	go clean
 	rd /s /q "./bin"
