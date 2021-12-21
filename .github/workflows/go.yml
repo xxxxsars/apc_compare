@@ -1,13 +1,27 @@
-name: Build Go binaries
-
-on: push
-
+name: Build and Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [windows-latest]
+        go-version: [1.17]
+    runs-on: ${{ matrix.platform }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
 
-      - name: Make binaries
-        uses: 0xnu/go-deploy-action@master
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: Build binary
+        run: |
+          SET CGO_ENABLED=0&&SET GOARCH=386&& SET GOOS=windows&& go build -ldflags "-s -w" -o bin/${BINARY_NAME}_x86.exe main.go
+          SET CGO_ENABLED=0&&SET GOARCH=amd64&& SET GOOS=windows&& go build -ldflags "-s -w" -o bin/${BINARY_NAME}_x64.exe main.go
+
